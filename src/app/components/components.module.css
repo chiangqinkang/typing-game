@@ -24,15 +24,23 @@ body {
     cursor: pointer;
 }
 
+.game {
+    line-height: 35px;
+    height: 230px;
+    margin-left: 100px;
+    width: 1920px;
+    overflow: hidden;
+    position: relative;
+    font-size: 2rem;
+}
+
 .words {
-    height: 280px;
+    margin-top: 100px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 100px;
-    font-size: 3rem;
-    overflow: hidden;
     position: relative;
+    overflow: hidden;
 }
 
 .word {
@@ -63,15 +71,15 @@ body {
     width: 2px;
     height: 1.6rem;
     position: fixed;
-    top: 242px;
+    top: 271px;
     left: 105px;
     background-color: var(--primaryColor);
     animation: blink 1s infinite;
 }
 
-.letter {
-    font-size: xx-large;
-}
+/*.letter {*/
+/*    font-size: xx-large;*/
+/*}*/
 
 .correct {
     color: #05f425;
@@ -83,3 +91,4 @@ body {
 .current {
     font-weight: bold;
 }
+

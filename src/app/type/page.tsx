@@ -1,16 +1,31 @@
+"use client";
+
+import React, { useState } from "react";
 import Header from "@/app/components/header";
-import Words from "@/app/components/words";
+import {words} from "../../../next.config";
+import Game from "@/app/components/game";
 
 export default function Type() {
+    const [usedWordList, setUsedWordList] = useState<string[]>([]);
+
+    function randomWord() {
+        const randomIndex = Math.floor(Math.random() * words.length);
+        return words[randomIndex];
+    }
+
+    function initGame() {
+        return Array.from({ length: 299 }, () => randomWord());
+    }
+
+    function newGame() {
+        const newWords: string[] = initGame();
+        setUsedWordList(newWords);
+    }
+
     return (
-        <div className="items-center p-24">
-            <h1 className="text-2xl font-bold text-lg">
-                Clicks and Clacks
-            </h1>
-            <div>
-                <Header />
-                <Words />
-            </div>
-        </div>
+        <>
+            <Header onRestart={newGame} />
+            <Game wordListToUse={usedWordList} />
+        </>
     );
 }

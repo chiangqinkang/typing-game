@@ -2,11 +2,10 @@
 import React, {useEffect, useState} from "react";
 import { words } from "../../../next.config";
 import styles from "./components.module.css";
-import RestartButton from "@/app/components/restart-button";
 
 
-export default function Words() {
-    const [usedWordList, setUsedWords] = useState<string[]>([]);
+export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
+    const [usedWordList, setUsedWords] = useState<string[]>(wordListToUse);
 
     function randomWord() {
         const randomIndex = Math.floor(Math.random() * words.length);
@@ -55,6 +54,8 @@ export default function Words() {
     function isSpace(key: string) {
         return key === " ";
     }
+
+
 
     function handleKeyUp(e: KeyboardEvent) {
 
@@ -177,6 +178,7 @@ export default function Words() {
         const nextLetter = document.querySelector(`.${styles.letter}.${styles.current}`)
         const nextWord = document.querySelector(`.${styles.word}.${styles.current}`);
         const caret = document.getElementById('caret');
+
         if (!caret) {
             return;
         }
@@ -192,6 +194,16 @@ export default function Words() {
             caret.style.visibility = 'hidden';
         }
 
+        if (currentWord && currentWord.getBoundingClientRect().top > 200) {
+            const words = document.getElementById("words");
+            if (words) {
+                const currentMarginTop = parseInt(words.style.marginTop || "0px");
+                words.style.marginTop = `${currentMarginTop - 35}px`;
+            }
+        }
+        // if (nextLetter) {
+        //     caret.style.top = `${nextLetter.getBoundingClientRect().top}px`;
+        // }
     }
 
 
@@ -220,7 +232,6 @@ export default function Words() {
 
     return (
         <div>
-            <RestartButton onClick={newGame} />
             <div id="words" className={styles.words}>
                 {usedWordList.map((word, index) => (
                     <div key={index} className={styles.word}>
