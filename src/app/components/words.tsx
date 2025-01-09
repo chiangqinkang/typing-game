@@ -27,7 +27,7 @@ export default function Words() {
     }
 
     function initGame() {
-        return Array.from({length: 30}, () => randomWord());
+        return Array.from({length: 299}, () => randomWord());
     }
 
     function newGame() {
@@ -48,6 +48,10 @@ export default function Words() {
         return key && key.length == 1 && key !== " ";
     }
 
+    function isBackspace(key:string) {
+        return key === "Backspace";
+    }
+
     function isSpace(key: string) {
         return key === " ";
     }
@@ -66,6 +70,12 @@ export default function Words() {
 
         if (currentLetter || currentWord) {
             expected = currentLetter?.innerHTML || " "
+        }
+
+        let isFirstLetter = false;
+
+        if (currentWord) {
+            isFirstLetter = currentLetter === currentWord.firstChild || false;
         }
 
         if (!e.key) {
@@ -94,6 +104,45 @@ export default function Words() {
             const nextLetter = currentLetter.nextSibling;
             if (nextLetter && nextLetter instanceof Element) {
                 addClassHelper(nextLetter, styles.current);
+            }
+        }
+
+
+        if (isBackspace(key)) {
+            if (!currentLetter && currentWord) {
+                const lastLetter = currentWord.lastChild;
+                if (lastLetter && lastLetter instanceof Element) {
+                    addClassHelper(lastLetter, styles.current);
+                    removeClassHelper(lastLetter, styles.correct);
+                    removeClassHelper(lastLetter, styles.wrong);
+                }
+            }
+
+            if (currentLetter && isFirstLetter) {
+                removeClassHelper(currentWord, styles.current);
+                if (!currentWord) {
+                    return;
+                }
+                const previousWord = currentWord.previousSibling;
+                if (previousWord && previousWord instanceof Element) {
+                    addClassHelper(previousWord, styles.current);
+                    removeClassHelper(currentLetter, styles.current);
+                    const previousWordLastLetter = previousWord.lastChild;
+                    if (previousWordLastLetter && previousWordLastLetter instanceof Element) {
+                        addClassHelper(previousWordLastLetter, styles.current);
+                        removeClassHelper(previousWordLastLetter, styles.correct);
+                        removeClassHelper(previousWordLastLetter, styles.wrong);
+                    }
+                }
+            }
+            if (currentLetter && !isFirstLetter) {
+                const previousLetter = currentLetter.previousSibling;
+                if (previousLetter && previousLetter instanceof Element) {
+                    removeClassHelper(currentLetter, styles.current);
+                    addClassHelper(previousLetter, styles.current);
+                    removeClassHelper(previousLetter, styles.correct);
+                    removeClassHelper(previousLetter, styles.wrong);
+                }
             }
         }
 
@@ -126,10 +175,21 @@ export default function Words() {
 
 
         const nextLetter = document.querySelector(`.${styles.letter}.${styles.current}`)
+        const nextWord = document.querySelector(`.${styles.word}.${styles.current}`);
         const caret = document.getElementById('caret');
-        if (nextLetter && caret) {
+        if (!caret) {
+            return;
+        }
+        if (nextLetter) {
+            // use left if there is a nextLetter
             caret.style.top = nextLetter.getBoundingClientRect().top + 10 + 'px';
             caret.style.left = nextLetter.getBoundingClientRect().left + 'px';
+        } else if (nextWord) {
+            // use right if nextWord
+            caret.style.top = nextWord.getBoundingClientRect().top + 29 + 'px';
+            caret.style.left = nextWord.getBoundingClientRect().right + 'px';
+        } else {
+            caret.style.visibility = 'hidden';
         }
 
     }
