@@ -194,16 +194,13 @@ export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
             caret.style.visibility = 'hidden';
         }
 
-        if (currentWord && currentWord.getBoundingClientRect().top > 200) {
+        if (currentWord && currentWord.getBoundingClientRect().top > 350) {
             const words = document.getElementById("words");
             if (words) {
                 const currentMarginTop = parseInt(words.style.marginTop || "0px");
-                words.style.marginTop = `${currentMarginTop - 35}px`;
+                words.style.marginTop = `${currentMarginTop - 80}px`;
             }
         }
-        // if (nextLetter) {
-        //     caret.style.top = `${nextLetter.getBoundingClientRect().top}px`;
-        // }
     }
 
 
