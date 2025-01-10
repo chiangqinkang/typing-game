@@ -4,7 +4,10 @@ import { words } from "../../../next.config";
 import styles from "./components.module.css";
 
 
-export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
+export default function Words({ wordListToUse, countDown, gameIsOver }: { wordListToUse: string[];
+countDown: () => void;
+gameIsOver: boolean;
+}) {
     const [usedWordList, setUsedWords] = useState<string[]>(wordListToUse);
 
     function randomWord() {
@@ -27,12 +30,6 @@ export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
 
     function initGame() {
         return Array.from({length: 299}, () => randomWord());
-    }
-
-    function newGame() {
-        const newWords: string[] = initGame();
-        setUsedWords(newWords);
-
     }
 
     function formatWord(word: string) {
@@ -83,11 +80,11 @@ export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
             return;
         }
 
-
         const key = e.key;
 
-
-        console.log({expected, key});
+        if (!window.timer && isValidLetter(key)) {
+            countDown();
+        }
 
         if (isValidLetter(key)) {
             const adder = key === expected ? styles.correct : styles.wrong;
@@ -203,9 +200,12 @@ export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
         }
     }
 
-
-
     useEffect(() => {
+        if (gameIsOver) {
+            return;
+        }
+        window.timer = null;
+        window.startTime = null;
         setUsedWords(initGame());
         window.addEventListener("keyup", e => handleKeyUp(e));
     }, []);
@@ -220,10 +220,6 @@ export default function Words({ wordListToUse }: { wordListToUse: string[] }) {
         if (firstLetter) {
             addClassHelper(firstLetter, styles.current);
         }
-        // const firstLetter = document.querySelector(`.${styles.letter}`);
-        // if (firstLetter) {
-        //     addClassHelper(firstLetter, styles.current);
-        // }
     }, [usedWordList]);
 
 
