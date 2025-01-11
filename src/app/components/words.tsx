@@ -8,6 +8,7 @@ export default function Words({ wordListToUse, countDown, gameIsOver }: { wordLi
 countDown: () => void;
 gameIsOver: boolean;
 }) {
+    // console.log("Rendering Game with wordListToUse:", wordListToUse);
     const [usedWordList, setUsedWords] = useState<string[]>(wordListToUse);
 
     function randomWord() {
@@ -181,7 +182,7 @@ gameIsOver: boolean;
         }
         if (nextLetter) {
             // use left if there is a nextLetter
-            caret.style.top = nextLetter.getBoundingClientRect().top + 10 + 'px';
+            caret.style.top = nextLetter.getBoundingClientRect().top + 20 + 'px';
             caret.style.left = nextLetter.getBoundingClientRect().left + 'px';
         } else if (nextWord) {
             // use right if nextWord

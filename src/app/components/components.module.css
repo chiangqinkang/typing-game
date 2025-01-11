@@ -70,8 +70,8 @@ body {
     width: 2px;
     height: 1.6rem;
     position: fixed;
-    top: 271px;
-    left: 105px;
+    top: 275px;
+    left: 250px;
     background-color: var(--primaryColor);
     animation: blink 1s infinite;
 }
